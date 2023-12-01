@@ -28,5 +28,6 @@ fn fragment() -> FragmentOutput {
 #ifdef FLAT_DEPTH
     out.frag_depth = flat_depth; 
 #endif
+
     return out;
 }

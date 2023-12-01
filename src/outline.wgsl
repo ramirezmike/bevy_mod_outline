@@ -3,6 +3,7 @@
 #import bevy_pbr::mesh_types::Mesh
 #import bevy_pbr::mesh_types::SkinnedMesh
 #import bevy_pbr::mesh_functions
+#import bevy_render::instance_index::get_instance_index
 
 struct Vertex {
 #ifdef VERTEX_POSITIONS
@@ -106,5 +107,13 @@ fn vertex(vertex_no_morph: Vertex) -> VertexOutput {
 #ifdef FLAT_DEPTH
     out.flat_depth = model_origin_z(vstage.origin, view.view_proj);
 #endif
+
+#ifdef BASE_INSTANCE_WORKAROUND
+    // Hack: this ensures the push constant is always used, which works around this issue:
+    // https://github.com/bevyengine/bevy/issues/10509
+    // This can be removed when wgpu 0.19 is released
+    out.position.x += min(f32(get_instance_index(0u)), 0.0);
+#endif
+
     return out;
 }
