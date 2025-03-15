@@ -304,7 +304,7 @@ impl SpecializedMeshPipeline for OutlinePipeline {
                 cull_mode = Some(Face::Back);
             }
         } else if key.pass_type() == PassType::Stencil {
-            cull_mode = Some(Face::Back);
+            cull_mode = None;
         } else {
             cull_mode = Some(Face::Front);
         }
