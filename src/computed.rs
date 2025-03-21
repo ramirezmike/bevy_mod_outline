@@ -144,33 +144,15 @@ type OutlineComponents<'a> = (
 #[allow(clippy::type_complexity)]
 pub(crate) fn compute_outline(
     mut root_query: Query<
-        (
-            Entity,
-            &mut ComputedOutline,
-            OutlineComponents,
-            Option<&Children>,
-        ),
+        (Entity, &mut ComputedOutline, OutlineComponents),
         Without<InheritOutline>,
     >,
-    mut child_query_mut: Query<(&mut ComputedOutline, OutlineComponents), With<InheritOutline>>,
-    child_query: Query<&Children>,
 ) {
-    for (entity, mut computed, components, children) in root_query.iter_mut() {
-        let changed = update_computed_outline(&mut computed, components, None, None, false);
-        if let Some(cs) = children {
-            let parent_computed = computed.0.as_ref().unwrap();
-            for child in cs.iter() {
-                propagate_computed_outline(
-                    parent_computed,
-                    changed,
-                    entity,
-                    *child,
-                    &mut child_query_mut,
-                    &child_query,
-                );
-            }
-        }
-    }
+    root_query
+        .par_iter_mut()
+        .for_each(|(entity, mut computed, components)| {
+            let _ = update_computed_outline(&mut computed, components, None, None, false);
+        });
 }
 
 fn propagate_computed_outline(

@@ -15,7 +15,7 @@ use bevy::{
 
 use crate::{pipeline::OutlinePipeline, ComputedOutline, TextureChannel};
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct ExtractedOutline {
     pub(crate) stencil: bool,
     pub(crate) volume: bool,

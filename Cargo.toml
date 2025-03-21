@@ -20,6 +20,7 @@ interpolation = { version = "0.3", optional = true }
 thiserror = "1.0"
 nonmax = "0.5"
 wgpu-types = "23"
+crossbeam = "0.8.4"
 
 [features]
 default = ["flood", "interpolation", "reflect", "scene"]
